@@ -6,8 +6,13 @@
 //
 
 import UIKit
+import CallKit
 
-class ViewController: UIViewController {
+class ViewController: UIViewController, CXProviderDelegate {
+    func providerDidReset(_ provider: CXProvider) {
+        <#code#>
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
