@@ -35,8 +35,9 @@ class ViewController: UIViewController, CXProviderDelegate {
         let uuid = UUID()
         // specify the recipient
         let recipient = CXHandle(type: .generic, value: "Outgoing Call")
-        let strtCallAction = CXStartCallAction(call: uuid, handle: recipient)
-        let transaction  = CXTransaction(action: strtCallAction)
+        let startCallAction = CXStartCallAction(call: uuid, handle: recipient)
+     //   startCallAction.isVideo
+        let transaction  = CXTransaction(action: startCallAction)
         
         callController.request(transaction, completion: { error in
             if let error = error {
