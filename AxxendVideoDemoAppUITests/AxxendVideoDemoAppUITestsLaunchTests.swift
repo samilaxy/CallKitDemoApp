@@ -1,13 +1,13 @@
 //
-//  CallKitDemoAppUITestsLaunchTests.swift
-//  CallKitDemoAppUITests
+//  AxxendVideoDemoAppUITestsLaunchTests.swift
+//  AxxendVideoDemoAppUITests
 //
 //  Created by Noye Samuel on 26/04/2023.
 //
 
 import XCTest
 
-final class CallKitDemoAppUITestsLaunchTests: XCTestCase {
+final class AxxendVideoDemoAppUITestsLaunchTests: XCTestCase {
 
     override class var runsForEachTargetApplicationUIConfiguration: Bool {
         true
