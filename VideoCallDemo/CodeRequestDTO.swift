@@ -1,58 +1,55 @@
 //
-//  PhoneRequestDTO.swift
-//  AxxendVideoDemoApp
+//  CodeRequestDTO.swift
+//  VideoCallDemo
 //
-//  Created by Noye Samuel on 26/04/2023.
+//  Created by Noye Samuel on 30/04/2023.
 //
 
 import Foundation
 
 
-
-struct PhoneRequestDTO {
-    var countryCode: String = ""
-    var phoneNumber: String  = ""
+struct CodeRequestDTO {
+    var userCode: String  = ""
     var validate: Validations
     
     init () {
-        countryCode = ""
-        phoneNumber = ""
+        userCode = ""
         validate = Validations()
     }
-    func phoneNumberParam() -> String {
+    func codeParam() -> String {
             //  return  countryCode+phoneNumber
-        return  "+"+countryCode+phoneNumber
+        return  userCode
     }
 }
 
     // all fields validations
 class Validations {
     static let shared = Validations()
-
-    func validatePhoneNumber(phoneNumber: String) -> Bool {
+    
+    func validatePhoneNumber(userCode: String) -> Bool {
             //  regex for sent code validations
         let phoneTest = NSPredicate(format: TextsInUse.ValidMatch,
                                     "[0-9]{9,12}$")
-        return phoneTest.evaluate(with: phoneNumber)
+        return phoneTest.evaluate(with: userCode)
     }
     
-    func validateUserPhoneNumber(_ phoneNumber: String?) -> (Bool, String) {
-        guard let userNumber = phoneNumber else {
+    func validateUserPhoneNumber(_ userCode: String?) -> (Bool, String) {
+        guard let userNumber = userCode else {
             return (false, TextsInUse.InvalidPhoneNumber)
         }
-        if userNumber.isEmpty || !validatePhoneNumber(phoneNumber: userNumber) {
+        if userNumber.isEmpty || !validatePhoneNumber(userCode: userNumber) {
             return (false, TextsInUse.InvalidPhoneNumber)
         }
         return (true, TextsInUse.Empty)
     }
 }
 
-
 struct TextsInUse {
     static let Empty = ""
         // textfields
     static let ValidMatch =  "SELF MATCHES %@"
     static let InvalidPhoneNumber = "*Invalid phone number"
+    static let NoInternet = "No Internet access, try again."
 }
 class Constants {
     static let OTPCODELENGTH = 6

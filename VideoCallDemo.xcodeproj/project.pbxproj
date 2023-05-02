@@ -1,0 +1,667 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 56;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		49224F5929FEE9D700596E18 /* CodeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49224F5829FEE9D700596E18 /* CodeView.swift */; };
+		49224F5B29FEEC9300596E18 /* CodeRequestDTO.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49224F5A29FEEC9300596E18 /* CodeRequestDTO.swift */; };
+		49224F6129FF477900596E18 /* SendbirdUIKit in Frameworks */ = {isa = PBXBuildFile; productRef = 49224F6029FF477900596E18 /* SendbirdUIKit */; };
+		496F280C29FC0378004C7CD6 /* VideoCallDemoApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F280B29FC0378004C7CD6 /* VideoCallDemoApp.swift */; };
+		496F280E29FC0378004C7CD6 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F280D29FC0378004C7CD6 /* ContentView.swift */; };
+		496F281029FC037A004C7CD6 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 496F280F29FC037A004C7CD6 /* Assets.xcassets */; };
+		496F281329FC037A004C7CD6 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 496F281229FC037A004C7CD6 /* Preview Assets.xcassets */; };
+		496F281D29FC037B004C7CD6 /* VideoCallDemoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F281C29FC037B004C7CD6 /* VideoCallDemoTests.swift */; };
+		496F282729FC037B004C7CD6 /* VideoCallDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F282629FC037B004C7CD6 /* VideoCallDemoUITests.swift */; };
+		496F282929FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F282829FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift */; };
+		496F283729FC0400004C7CD6 /* SendBirdCalls in Frameworks */ = {isa = PBXBuildFile; productRef = 496F283629FC0400004C7CD6 /* SendBirdCalls */; };
+		496F283A29FC2464004C7CD6 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F283929FC2464004C7CD6 /* CallManager.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		496F281929FC037B004C7CD6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496F280029FC0378004C7CD6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 496F280729FC0378004C7CD6;
+			remoteInfo = VideoCallDemo;
+		};
+		496F282329FC037B004C7CD6 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 496F280029FC0378004C7CD6 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 496F280729FC0378004C7CD6;
+			remoteInfo = VideoCallDemo;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		49224F5829FEE9D700596E18 /* CodeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeView.swift; sourceTree = "<group>"; };
+		49224F5A29FEEC9300596E18 /* CodeRequestDTO.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodeRequestDTO.swift; sourceTree = "<group>"; };
+		496F280829FC0378004C7CD6 /* VideoCallDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoCallDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		496F280B29FC0378004C7CD6 /* VideoCallDemoApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallDemoApp.swift; sourceTree = "<group>"; };
+		496F280D29FC0378004C7CD6 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		496F280F29FC037A004C7CD6 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		496F281229FC037A004C7CD6 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		496F281829FC037B004C7CD6 /* VideoCallDemoTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VideoCallDemoTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		496F281C29FC037B004C7CD6 /* VideoCallDemoTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallDemoTests.swift; sourceTree = "<group>"; };
+		496F282229FC037B004C7CD6 /* VideoCallDemoUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VideoCallDemoUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		496F282629FC037B004C7CD6 /* VideoCallDemoUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallDemoUITests.swift; sourceTree = "<group>"; };
+		496F282829FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallDemoUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		496F283829FC09CF004C7CD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		496F283929FC2464004C7CD6 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		496F280529FC0378004C7CD6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49224F6129FF477900596E18 /* SendbirdUIKit in Frameworks */,
+				496F283729FC0400004C7CD6 /* SendBirdCalls in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496F281529FC037B004C7CD6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496F281F29FC037B004C7CD6 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		496F27FF29FC0378004C7CD6 = {
+			isa = PBXGroup;
+			children = (
+				496F280A29FC0378004C7CD6 /* VideoCallDemo */,
+				496F281B29FC037B004C7CD6 /* VideoCallDemoTests */,
+				496F282529FC037B004C7CD6 /* VideoCallDemoUITests */,
+				496F280929FC0378004C7CD6 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		496F280929FC0378004C7CD6 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				496F280829FC0378004C7CD6 /* VideoCallDemo.app */,
+				496F281829FC037B004C7CD6 /* VideoCallDemoTests.xctest */,
+				496F282229FC037B004C7CD6 /* VideoCallDemoUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		496F280A29FC0378004C7CD6 /* VideoCallDemo */ = {
+			isa = PBXGroup;
+			children = (
+				496F283829FC09CF004C7CD6 /* Info.plist */,
+				496F280B29FC0378004C7CD6 /* VideoCallDemoApp.swift */,
+				496F280D29FC0378004C7CD6 /* ContentView.swift */,
+				496F280F29FC037A004C7CD6 /* Assets.xcassets */,
+				496F281129FC037A004C7CD6 /* Preview Content */,
+				496F283929FC2464004C7CD6 /* CallManager.swift */,
+				49224F5829FEE9D700596E18 /* CodeView.swift */,
+				49224F5A29FEEC9300596E18 /* CodeRequestDTO.swift */,
+			);
+			path = VideoCallDemo;
+			sourceTree = "<group>";
+		};
+		496F281129FC037A004C7CD6 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				496F281229FC037A004C7CD6 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		496F281B29FC037B004C7CD6 /* VideoCallDemoTests */ = {
+			isa = PBXGroup;
+			children = (
+				496F281C29FC037B004C7CD6 /* VideoCallDemoTests.swift */,
+			);
+			path = VideoCallDemoTests;
+			sourceTree = "<group>";
+		};
+		496F282529FC037B004C7CD6 /* VideoCallDemoUITests */ = {
+			isa = PBXGroup;
+			children = (
+				496F282629FC037B004C7CD6 /* VideoCallDemoUITests.swift */,
+				496F282829FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift */,
+			);
+			path = VideoCallDemoUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		496F280729FC0378004C7CD6 /* VideoCallDemo */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496F282C29FC037B004C7CD6 /* Build configuration list for PBXNativeTarget "VideoCallDemo" */;
+			buildPhases = (
+				496F280429FC0378004C7CD6 /* Sources */,
+				496F280529FC0378004C7CD6 /* Frameworks */,
+				496F280629FC0378004C7CD6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = VideoCallDemo;
+			packageProductDependencies = (
+				496F283629FC0400004C7CD6 /* SendBirdCalls */,
+				49224F6029FF477900596E18 /* SendbirdUIKit */,
+			);
+			productName = VideoCallDemo;
+			productReference = 496F280829FC0378004C7CD6 /* VideoCallDemo.app */;
+			productType = "com.apple.product-type.application";
+		};
+		496F281729FC037B004C7CD6 /* VideoCallDemoTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496F282F29FC037B004C7CD6 /* Build configuration list for PBXNativeTarget "VideoCallDemoTests" */;
+			buildPhases = (
+				496F281429FC037B004C7CD6 /* Sources */,
+				496F281529FC037B004C7CD6 /* Frameworks */,
+				496F281629FC037B004C7CD6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				496F281A29FC037B004C7CD6 /* PBXTargetDependency */,
+			);
+			name = VideoCallDemoTests;
+			productName = VideoCallDemoTests;
+			productReference = 496F281829FC037B004C7CD6 /* VideoCallDemoTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		496F282129FC037B004C7CD6 /* VideoCallDemoUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 496F283229FC037B004C7CD6 /* Build configuration list for PBXNativeTarget "VideoCallDemoUITests" */;
+			buildPhases = (
+				496F281E29FC037B004C7CD6 /* Sources */,
+				496F281F29FC037B004C7CD6 /* Frameworks */,
+				496F282029FC037B004C7CD6 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				496F282429FC037B004C7CD6 /* PBXTargetDependency */,
+			);
+			name = VideoCallDemoUITests;
+			productName = VideoCallDemoUITests;
+			productReference = 496F282229FC037B004C7CD6 /* VideoCallDemoUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		496F280029FC0378004C7CD6 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1430;
+				LastUpgradeCheck = 1430;
+				TargetAttributes = {
+					496F280729FC0378004C7CD6 = {
+						CreatedOnToolsVersion = 14.3;
+					};
+					496F281729FC037B004C7CD6 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = 496F280729FC0378004C7CD6;
+					};
+					496F282129FC037B004C7CD6 = {
+						CreatedOnToolsVersion = 14.3;
+						TestTargetID = 496F280729FC0378004C7CD6;
+					};
+				};
+			};
+			buildConfigurationList = 496F280329FC0378004C7CD6 /* Build configuration list for PBXProject "VideoCallDemo" */;
+			compatibilityVersion = "Xcode 14.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 496F27FF29FC0378004C7CD6;
+			packageReferences = (
+				496F283529FC0400004C7CD6 /* XCRemoteSwiftPackageReference "sendbird-calls-ios" */,
+				49224F5C29FF46E800596E18 /* XCRemoteSwiftPackageReference "SendBird-iOS-framework" */,
+				49224F5F29FF477900596E18 /* XCRemoteSwiftPackageReference "sendbird-uikit-ios" */,
+			);
+			productRefGroup = 496F280929FC0378004C7CD6 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				496F280729FC0378004C7CD6 /* VideoCallDemo */,
+				496F281729FC037B004C7CD6 /* VideoCallDemoTests */,
+				496F282129FC037B004C7CD6 /* VideoCallDemoUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		496F280629FC0378004C7CD6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496F281329FC037A004C7CD6 /* Preview Assets.xcassets in Resources */,
+				496F281029FC037A004C7CD6 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496F281629FC037B004C7CD6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496F282029FC037B004C7CD6 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		496F280429FC0378004C7CD6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496F283A29FC2464004C7CD6 /* CallManager.swift in Sources */,
+				49224F5B29FEEC9300596E18 /* CodeRequestDTO.swift in Sources */,
+				496F280E29FC0378004C7CD6 /* ContentView.swift in Sources */,
+				496F280C29FC0378004C7CD6 /* VideoCallDemoApp.swift in Sources */,
+				49224F5929FEE9D700596E18 /* CodeView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496F281429FC037B004C7CD6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496F281D29FC037B004C7CD6 /* VideoCallDemoTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		496F281E29FC037B004C7CD6 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				496F282729FC037B004C7CD6 /* VideoCallDemoUITests.swift in Sources */,
+				496F282929FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		496F281A29FC037B004C7CD6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 496F280729FC0378004C7CD6 /* VideoCallDemo */;
+			targetProxy = 496F281929FC037B004C7CD6 /* PBXContainerItemProxy */;
+		};
+		496F282429FC037B004C7CD6 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 496F280729FC0378004C7CD6 /* VideoCallDemo */;
+			targetProxy = 496F282329FC037B004C7CD6 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		496F282A29FC037B004C7CD6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		496F282B29FC037B004C7CD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		496F282D29FC037B004C7CD6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"VideoCallDemo/Preview Content\"";
+				DEVELOPMENT_TEAM = R85N7Z4DTZ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VideoCallDemo/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to make video calls";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to your microphone to make video calls";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = multicommerce.VideoCallDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		496F282E29FC037B004C7CD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"VideoCallDemo/Preview Content\"";
+				DEVELOPMENT_TEAM = R85N7Z4DTZ;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = VideoCallDemo/Info.plist;
+				INFOPLIST_KEY_NSCameraUsageDescription = "This app needs access to your camera to make video calls";
+				INFOPLIST_KEY_NSMicrophoneUsageDescription = "This app needs access to your microphone to make video calls";
+				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = multicommerce.VideoCallDemo;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SUPPORTS_MAC_DESIGNED_FOR_IPHONE_IPAD = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		496F283029FC037B004C7CD6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R85N7Z4DTZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = multicommerce.VideoCallDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VideoCallDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VideoCallDemo";
+			};
+			name = Debug;
+		};
+		496F283129FC037B004C7CD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R85N7Z4DTZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 16.4;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = multicommerce.VideoCallDemoTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/VideoCallDemo.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/VideoCallDemo";
+			};
+			name = Release;
+		};
+		496F283329FC037B004C7CD6 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R85N7Z4DTZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = multicommerce.VideoCallDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VideoCallDemo;
+			};
+			name = Debug;
+		};
+		496F283429FC037B004C7CD6 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = R85N7Z4DTZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = multicommerce.VideoCallDemoUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_TARGET_NAME = VideoCallDemo;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		496F280329FC0378004C7CD6 /* Build configuration list for PBXProject "VideoCallDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496F282A29FC037B004C7CD6 /* Debug */,
+				496F282B29FC037B004C7CD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496F282C29FC037B004C7CD6 /* Build configuration list for PBXNativeTarget "VideoCallDemo" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496F282D29FC037B004C7CD6 /* Debug */,
+				496F282E29FC037B004C7CD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496F282F29FC037B004C7CD6 /* Build configuration list for PBXNativeTarget "VideoCallDemoTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496F283029FC037B004C7CD6 /* Debug */,
+				496F283129FC037B004C7CD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		496F283229FC037B004C7CD6 /* Build configuration list for PBXNativeTarget "VideoCallDemoUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				496F283329FC037B004C7CD6 /* Debug */,
+				496F283429FC037B004C7CD6 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		49224F5C29FF46E800596E18 /* XCRemoteSwiftPackageReference "SendBird-iOS-framework" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sendbird/SendBird-iOS-framework";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+		49224F5F29FF477900596E18 /* XCRemoteSwiftPackageReference "sendbird-uikit-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sendbird/sendbird-uikit-ios";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		496F283529FC0400004C7CD6 /* XCRemoteSwiftPackageReference "sendbird-calls-ios" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/sendbird/sendbird-calls-ios";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		49224F6029FF477900596E18 /* SendbirdUIKit */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 49224F5F29FF477900596E18 /* XCRemoteSwiftPackageReference "sendbird-uikit-ios" */;
+			productName = SendbirdUIKit;
+		};
+		496F283629FC0400004C7CD6 /* SendBirdCalls */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 496F283529FC0400004C7CD6 /* XCRemoteSwiftPackageReference "sendbird-calls-ios" */;
+			productName = SendBirdCalls;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 496F280029FC0378004C7CD6 /* Project object */;
+}
