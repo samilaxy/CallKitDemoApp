@@ -1,0 +1,11 @@
+//
+//  Config.xcconfig
+//  VideoCallDemo
+//
+//  Created by Noye Samuel on 03/05/2023.
+//
+
+// Configuration settings file format documentation can be found at:
+// https://help.apple.com/xcode/#/dev745c5c974
+A_Token = 641ce3b76e90c0c96ed178c684c1e2dae2c0ea6b
+App_ID = 0A7F7DC2-AD5E-4D48-9E07-222A706C6557

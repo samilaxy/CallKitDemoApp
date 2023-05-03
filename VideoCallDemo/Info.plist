@@ -10,5 +10,9 @@
 		<string>remote-notification</string>
 		<string>voip</string>
 	</array>
+	<key>A_Token</key>
+	<string>$(A_Token)</string>
+	<key>App_ID</key>
+	<string>$(App_ID)</string>
 </dict>
 </plist>

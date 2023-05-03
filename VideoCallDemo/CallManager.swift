@@ -12,7 +12,7 @@ import SwiftUI
 import UIKit
 import Network
 
-//import SendBirdUIKit
+    //import SendBirdUIKit
 
 class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     let provider = CXProvider(configuration: CXProviderConfiguration())
@@ -24,8 +24,8 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     @Published var callDuration = 0
     @Published var codeError = ""
     @Published var request: CodeRequestDTO
-    @Published var localVideoView: UIView!
-    @Published var remoteVideoView: UIView!
+    @Published var localVideoView: SendBirdVideoView?
+    @Published var remoteVideoView: SendBirdVideoView?
     @Published var userCode = ""
     
     override init() {
@@ -36,37 +36,36 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     func startCall(withUser user: String) {
         
         if isConnected() {
-            let params = AuthenticateParams(userId: "12345", accessToken: "0de9e4ffed8688f54c51e4e29590ced4e47bb304")
-            print(user)
-            SendBirdCall.authenticate(with: params) { (user1, error) in
-                guard error == nil else {
+                // The user is authenticated, you can start a call now
+            let dialParams = DialParams(calleeId: user, isVideoCall: true)
+            SendBirdCall.dial(with: dialParams) { call, error in
+                if let error = error {
+                    print("Error starting call: \(error.localizedDescription)")
                     DispatchQueue.main.async {
                         self.showAlert = true
-                        self.codeError = error?.localizedDescription ?? "Unknown"
-                        print(error?.localizedDescription ?? "default value")
+                        self.codeError = error.localizedDescription
                     }
-                    return
-                }
-                
-                    // The user is authenticated, you can start a call now
-                print("usercode: ",self.userCode)
-                let dialParams = DialParams(calleeId: user, isVideoCall: true)
-                SendBirdCall.dial(with: dialParams) { call, error in
-                    if let error = error {
-                        print("Error starting call: \(error.localizedDescription)")
-                        DispatchQueue.main.async {
-                            self.showAlert = true
-                            self.codeError = error.localizedDescription
-                        }
-                    } else {
-                        print("Call started successfully")
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 3) {
-                                //put the reset function here
-                            self.isOnCall = true
-                        }
-                        self.call = call // Store the callId
-                        call?.delegate = self
+                } else {
+                    print("Call started successfully")
+                    guard let call = call else {
+                        return
                     }
+                    let update = CXCallUpdate()
+                    update.remoteHandle = CXHandle(type: .generic, value: call.callId)
+                    update.hasVideo = true
+                    
+                    self.provider.reportNewIncomingCall(with: call.callUUID ?? UUID(), update: update) { error in
+                        if let error = error {
+                            print("Failed to report incoming call: \(error.localizedDescription)")
+                        }
+                    }
+                    
+                    DispatchQueue.main.async {
+                            //put the reset function here
+                        self.isOnCall = true
+                    }
+                    self.call = call // Store the callId
+                    call.delegate = self
                 }
             }
         }
@@ -74,7 +73,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
             showError(message: TextsInUse.NoInternet)
         }
     }
-
+    
     func showError(message: String) {
         DispatchQueue.main.async {
             self.showAlert = true
@@ -95,22 +94,22 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
         update.localizedCallerName = userCode
-        let callUUID = UUID(uuidString: call.callId)!
-        provider.reportNewIncomingCall(with: callUUID, update: update) { error in
-            if let error = error {
-                    // Handle the error
-                self.showError(message: error.localizedDescription)
-            } else {
-                    // Call successfully reported
-                    // Get the local and remote video views
-                DispatchQueue.main.async {
-                    self.localVideoView = call.localVideoView
-                    self.remoteVideoView = call.remoteVideoView
-                    call.delegate = self
-                    print("view: ",self.localVideoView)
-                }
-            }
-        }
+        _ = UUID(uuidString: call.callId)!
+            //        provider.reportNewIncomingCall(with: callUUID, update: update) { error in
+            //            if let error = error {
+            //                    // Handle the error
+            //                self.showError(message: error.localizedDescription)
+            //            } else {
+            //                    // Call successfully reported
+            //                    // Get the local and remote video views
+            //                DispatchQueue.main.async {
+            //                    self.localVideoView = call.localVideoView
+            //                    self.remoteVideoView = call.remoteVideoView
+            //                    call.delegate = self
+            //                    print("view: ",self.localVideoView)
+            //                }
+            //            }
+            //        }
     }
     func isConnected() -> Bool {
         let monitor = NWPathMonitor()
@@ -135,7 +134,8 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
         return isConnected
     }
     func didStartRinging(_ call: SendBirdCalls.DirectCall) {
-        call.accept(with: <#AcceptParams#>)
+        let acceptParams = AcceptParams()
+        call.accept(with: acceptParams)
         call.delegate = self
     }
     func didEnd(_ call: SendBirdCalls.DirectCall) {
@@ -147,7 +147,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     }
     
     func didFailWithError(_ error: Error, for call: SendBirdCalls.DirectCall) {
-                // Handle the error
+            // Handle the error
         self.showError(message: error.localizedDescription)
     }
     
@@ -163,10 +163,10 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
         callTimer = nil
     }
     
-//    func switchCameraPosition() {
-//        SendBirdCall.switchCameraPosition()
-//    }
-
+        //    func switchCameraPosition() {
+        //        SendBirdCall.switchCameraPosition()
+        //    }
+    
     
     func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
         guard let uuid = UUID(uuidString: call.uuid.uuidString) else { return }
@@ -197,10 +197,8 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
                                     self.showError(message: error.localizedDescription)
                                 }
                             }
-                            DispatchQueue.main.async {
-                                self.call = directCall
-                                self.call?.delegate = self
-                            }
+                            self.call = directCall
+                            self.call?.delegate = self
                         } else {
                                 // Handle the error
                             self.showError(message: error?.localizedDescription ?? "Unknown error")
@@ -218,4 +216,19 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
 
 struct HangupParams {
     let call: CXCall
+}
+
+class MyCallDelegate: DirectCallDelegate {
+    func didConnect(_ call: SendBirdCalls.DirectCall) {
+            //
+    }
+    
+    func didEnd(_ call: SendBirdCalls.DirectCall) {
+            //
+    }
+    
+    func didStartRinging(_ call: SendBirdCalls.DirectCall) {
+        print("Call started ringing on recipient's device")
+            // You can add code here to update the UI or perform other actions
+    }
 }

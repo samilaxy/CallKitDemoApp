@@ -50,6 +50,9 @@ struct TextsInUse {
     static let ValidMatch =  "SELF MATCHES %@"
     static let InvalidPhoneNumber = "*Invalid phone number"
     static let NoInternet = "No Internet access, try again."
+    static let AppID = Bundle.main.object(forInfoDictionaryKey: "App_ID") as! String
+    static let Token = Bundle.main.object(forInfoDictionaryKey: "A_Token") as! String
+    static let UserID = "1234"
 }
 class Constants {
     static let OTPCODELENGTH = 6

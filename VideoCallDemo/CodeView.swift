@@ -13,11 +13,13 @@ import CallKit
 struct CodeView: View {
     @ObservedObject var callViewModel = CallDelegate()
     @State private var userCode = ""
+    @State private var error = ""
     
     var body: some View {
         NavigationStack {
             ZStack {
                 VStack(spacing: 50) {
+                    
                     HStack {
                         Text("Enter user code")
                             .foregroundColor(Color(UIColor.secondaryLabel))
@@ -50,16 +52,22 @@ struct CodeView: View {
                                                 callViewModel.userCode = userCode
                                             }
                                             if userCode == newValue {
-                                                callViewModel.codeError = ""
+                                                callViewModel.codeError  = ""
                                             }
                                         })
-                                        //   if phoneNumber.count >= 9 && !countryCode.isEmpty {
+                                    
                                     Button(action: {
-                                        callViewModel.startCall(withUser: userCode)
+                                        if !userCode.isEmpty {
+                                            callViewModel.showAlert = false
+                                            callViewModel.startCall(withUser: userCode)
+                                        }else {
+                                            callViewModel.showAlert = true
+                                            callViewModel.codeError = "Code can't be empty"
+                                        }
                                     }, label: {
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 0).stroke()
-                                                .frame(width: 80, height: 50)
+                                                .frame(width: 80, height: 49)
                                                 .background(Color.green)
                                                 // .cornerRadius(10)
                                             Text("Call")
@@ -80,18 +88,19 @@ struct CodeView: View {
                                 }
                             }
                             .frame(height: 50)
-//                            HStack {
-//                                Text(callViewModel.codeError)
-//                                    .padding(.leading, 8)
-//                                    .foregroundColor(.red)
-//                                    .fixedSize(horizontal: false, vertical: true)
-//                                    .frame(height: 8.0, alignment: .leading)
-//                                    .font(.caption)
-//                                Spacer()
-//                            }
+                            HStack {
+                                if userCode.isEmpty {
+                                    Text(error)
+                                        .padding(.top, 70)
+                                        .padding(.leading, 8)
+                                        .foregroundColor(.red)
+                                        .font(.caption)
+                                        .frame(height: 8.0, alignment: .leading)
+                                }
+                                Spacer()
+                            }
                         }
                             // MARK: VSTACK
-                        .multilineTextAlignment(.leading)
                     }
                     .navigationBarHidden(true)
                     .padding(.bottom, 100)

@@ -53,6 +53,7 @@
 		496F282829FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VideoCallDemoUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		496F283829FC09CF004C7CD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		496F283929FC2464004C7CD6 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
+		49D349582A0310470060A2D1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -111,6 +112,7 @@
 				496F280F29FC037A004C7CD6 /* Assets.xcassets */,
 				496F281129FC037A004C7CD6 /* Preview Content */,
 				496F283929FC2464004C7CD6 /* CallManager.swift */,
+				49D349582A0310470060A2D1 /* Config.xcconfig */,
 				49224F5829FEE9D700596E18 /* CodeView.swift */,
 				49224F5A29FEEC9300596E18 /* CodeRequestDTO.swift */,
 			);
@@ -324,6 +326,7 @@
 /* Begin XCBuildConfiguration section */
 		496F282A29FC037B004C7CD6 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49D349582A0310470060A2D1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;
@@ -384,6 +387,7 @@
 		};
 		496F282B29FC037B004C7CD6 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 49D349582A0310470060A2D1 /* Config.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				CLANG_ANALYZER_NONNULL = YES;

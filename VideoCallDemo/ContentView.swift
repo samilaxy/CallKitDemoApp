@@ -6,7 +6,6 @@
 ////
 
 import SwiftUI
-import SendBirdSDK
 import SendBirdCalls
 
 
@@ -15,143 +14,123 @@ struct ContentView: View {
     
     @ObservedObject var callManager = CallDelegate()
     @Environment(\.presentationMode) var presentationMode
-    @State var call: DirectCall?
+     var call: DirectCall?
     
     var body: some View {
-//        VStack {
-//            if let localView = callManager.localVideoView {
-//                VideoCallView(localVideoView: localView, remoteVideoView: callManager.remoteVideoView ?? localView)
-//            } else {
-//                ZStack{
-//                   ProgressView()
-//                    Image(systemName: "video.slash")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .foregroundColor(.gray)
-//                }.padding(.top, 30)
-//                .frame(width: 200, height: 200)
-//            }
-//
-//            if let remoteView = callManager.remoteVideoView {
-//                VideoView(videoView: remoteView)
-//            } else {
-//             //   Spacer()
-//                ZStack{
-//                    ProgressView()
-//                    Image(systemName: "person.crop.circle.fill")
-//                        .resizable()
-//                        .aspectRatio(contentMode: .fit)
-//                        .foregroundColor(.gray)
-//                } .frame(width: 200, height: 200)
-//            }
-//
-//          Spacer()
-//
-//            HStack {
-//                Button(action: {
-//                    callManager.endCall()
-//                }, label: {
-//                    Image(systemName: "phone.down.fill")
-//                        .resizable()
-//                        .frame(width: 25, height: 25)
-//                        .foregroundColor(.red)
-//                })
-//                .alert(isPresented: $callManager.showAlert) {
-//                    Alert(
-//                        title: Text("Error"),
-//                        message: Text(callManager.codeError),
-//                        primaryButton: .default(Text("OK"), action: {
-//                            self.presentationMode.wrappedValue.dismiss()
-//                        }),
-//                        secondaryButton: .cancel(Text("Cancel"))
-//                    )
-//                }
-//
-//                Spacer()
-//
-//                Button(action: {
-//                //    callManager.switchCameraPosition()
-//                }, label: {
-//                    Image(systemName: "camera.rotate.fill")
-//                        .resizable()
-//                        .frame(width: 25, height: 25)
-//                        .foregroundColor(.white)
-//                })
-//            }
-//            .padding(.horizontal, 20)
-//            .padding(.vertical, 10)
-//            .background(Color.black.opacity(0.7))
-//        }
-        ZStack{
-            if let remoteView = callManager.localVideoView {
-                    //                VideoView(videoView: remoteView)
+        NavigationView{
+            ZStack {
+                    //            if let remoteVideoView = call.setLocalVideoView(localVideoView) {
+                    //                UIViewRepresentableWrapper(remoteVideoView)
+                    //                    .edgesIgnoringSafeArea(.all)
+                    //                    .background(Color.gray)
                     //            }
-                VideoCallView(localVideoView: callManager.localVideoView ?? remoteView, remoteVideoView: callManager.remoteVideoView ?? remoteView, call: $call )
-                    .navigationBarTitle(Text(callManager.request.userCode), displayMode: .inline)
-                    .onAppear {
-                            //    callManager.startCall(withUser: callManager.request.userCode)
+                    //
+                    //            if let localVideoView = call.setRemoteVideoView(remoteVideoView) {
+                    //                UIViewRepresentableWrapper(localVideoView)
+                    //                    .frame(width: 150, height: 150)
+                    //                    .background(Color.secondary)
+                    //                    .cornerRadius(75)
+                    //                    .offset(x: UIScreen.main.bounds.width - 120, y: UIScreen.main.bounds.height - 250)
+                    //            }
+                ZStack {
+                    if let remoteVideoView = callManager.remoteVideoView {
+                        RemoteVideoView(remoteVideoView: remoteVideoView)
+                        
+                    } else {
+                        Text("Remote video view is not available")
                     }
-                    .onDisappear {
-                        callManager.endCall()
+                }   .edgesIgnoringSafeArea(.all)
+                    .background(Color.gray)
+                
+                
+                ZStack {
+                    if let remoteVideoView = callManager.localVideoView {
+                        LocalVideoView(localVideoView: remoteVideoView)
+                        
+                    } else {
+                        Text("Local video view is not available")
                     }
+                }.frame(width: 150, height: 150)
+                    .background(Color.secondary)
+                    .cornerRadius(75)
+                    .offset(x: UIScreen.main.bounds.width - 120, y: UIScreen.main.bounds.height - 250)
+                
+                VStack {
+                    Spacer()
+                    
+                    HStack {
+                        Spacer()
+                        
+                        Button(action: {
+                                // Handle camera switch action
+                        }) {
+                            Image(systemName: "camera.rotate")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.green)
+                                .cornerRadius(25)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                                // Handle end call action
+                        }) {
+                            Image(systemName: "phone.down.fill")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.red)
+                                .cornerRadius(25)
+                        }
+                        
+                        Spacer()
+                        
+                        Button(action: {
+                                // Handle mute/unmute action
+                        }) {
+                            Image(systemName: "mic.slash")
+                                .foregroundColor(.white)
+                                .padding()
+                                .background(Color.green)
+                                .cornerRadius(25)
+                        }
+                        
+                        Spacer()
+                    }
+                    .navigationBarTitle(String(callManager.callDuration), displayMode: .inline)
+                    .padding()
+                }
             }
         }
     }
 }
 
-struct VideoView: UIViewRepresentable {
-    let videoView: UIView
+struct RemoteVideoView: UIViewRepresentable {
+  
+
+    let remoteVideoView: SendBirdVideoView
     
-    func makeUIView(context: Context) -> UIView {
-        return videoView
+    func makeUIView(context: Context) -> SendBirdVideoView {
+        return remoteVideoView
     }
     
-    func updateUIView(_ uiView: UIView, context: Context) {}
+    func updateUIView(_ uiView: SendBirdCalls.SendBirdVideoView, context: Context) {
+            //
+    }
+    typealias UIViewType = SendBirdVideoView
 }
 
-struct VideoCallView: UIViewRepresentable {
-    let localVideoView: UIView
-    let remoteVideoView: UIView
-    @Binding var call: SendBirdCalls.DirectCall?
+struct LocalVideoView: UIViewRepresentable {
     
-    func makeUIView(context: Context) -> SBDVideoView {
-        let view = UIView(frame: .zero)
-        view.addSubview(localVideoView)
-        view.addSubview(remoteVideoView)
-        
-            // Constrain local video view to top-left corner
-        localVideoView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            localVideoView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            localVideoView.topAnchor.constraint(equalTo: view.topAnchor),
-            localVideoView.widthAnchor.constraint(equalTo: view.widthAnchor, multiplier: 0.3),
-            localVideoView.heightAnchor.constraint(equalTo: localVideoView.widthAnchor)
-        ])
-        
-            // Constrain remote video view to fill the rest of the view
-        remoteVideoView.translatesAutoresizingMaskIntoConstraints = false
-        NSLayoutConstraint.activate([
-            remoteVideoView.leadingAnchor.constraint(equalTo: localVideoView.trailingAnchor),
-            remoteVideoView.topAnchor.constraint(equalTo: view.topAnchor),
-            remoteVideoView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            remoteVideoView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
-        
-        return view
+    let localVideoView: SendBirdVideoView
+    
+    func makeUIView(context: Context) -> SendBirdVideoView {
+        return localVideoView
     }
     
-    func updateUIView(_ uiView: SBDVideoView, context: Context) {
-        if let call = call {
-            if call.localVideoView == nil {
-                call.localVideoView = uiView
-            } else if call.remoteVideoView == nil {
-                call.remoteVideoView = uiView
-            }
-        }
+    func updateUIView(_ uiView: SendBirdCalls.SendBirdVideoView, context: Context) {
+        //
     }
-
-    
-    typealias UIViewType = UIView
 }
 
 struct ContentView_Previews: PreviewProvider {
