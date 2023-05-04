@@ -32,22 +32,24 @@ struct ContentView: View {
                     //                    .cornerRadius(75)
                     //                    .offset(x: UIScreen.main.bounds.width - 120, y: UIScreen.main.bounds.height - 250)
                     //            }
-                ZStack {
+                VStack {
                     if let remoteVideoView = callManager.remoteVideoView {
                         RemoteVideoView(remoteVideoView: remoteVideoView)
                         
                     } else {
-                        Text("Remote video view is not available")
+                        ProgressView()
+                        Text("Remote video view loading..")
                     }
                 }   .edgesIgnoringSafeArea(.all)
-                    .background(Color.gray)
+                    .background(Color.clear)
                 
                 
-                ZStack {
-                    if let remoteVideoView = callManager.localVideoView {
-                        LocalVideoView(localVideoView: remoteVideoView)
+                VStack {
+                    if let localVideoView = callManager.localVideoView {
+                        LocalVideoView(localVideoView: localVideoView)
                         
                     } else {
+                        ProgressView()
                         Text("Local video view is not available")
                     }
                 }.frame(width: 150, height: 150)
@@ -75,6 +77,7 @@ struct ContentView: View {
                         
                         Button(action: {
                                 // Handle end call action
+                           callManager.endCall()
                         }) {
                             Image(systemName: "phone.down.fill")
                                 .foregroundColor(.white)
@@ -97,7 +100,7 @@ struct ContentView: View {
                         
                         Spacer()
                     }
-                    .navigationBarTitle(String(callManager.callDuration), displayMode: .inline)
+                    .navigationBarTitle(callManager.formattedTime, displayMode: .inline)
                     .padding()
                 }
             }

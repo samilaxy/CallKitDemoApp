@@ -11,6 +11,7 @@ import SendBirdCalls
 import SwiftUI
 import UIKit
 import Network
+import Combine
 
     //import SendBirdUIKit
 
@@ -21,30 +22,34 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     private var callTimer: Timer?
     @Published var isOnCall = false
     @Published var showAlert = false
-    @Published var callDuration = 0
     @Published var codeError = ""
     @Published var request: CodeRequestDTO
     @Published var localVideoView: SendBirdVideoView?
     @Published var remoteVideoView: SendBirdVideoView?
     @Published var userCode = ""
-    
+    @Published var isRunning: Bool = false
+    @Published var callDuration = 0.0
+    private var timer: AnyCancellable?
+        // format timer to show mm:ss:cc.
+    var formattedTime: String {
+        let seconds = Int(callDuration) % 60
+        let minutes = Int(callDuration / 60)
+        return String(format: "%02d:%02d", minutes, seconds)
+    }
     override init() {
         request = CodeRequestDTO()
         super.init()
     }
     
     func startCall(withUser user: String) {
-        
+        isRunning = true
         if isConnected() {
                 // The user is authenticated, you can start a call now
             let dialParams = DialParams(calleeId: user, isVideoCall: true)
             SendBirdCall.dial(with: dialParams) { call, error in
                 if let error = error {
                     print("Error starting call: \(error.localizedDescription)")
-                    DispatchQueue.main.async {
-                        self.showAlert = true
-                        self.codeError = error.localizedDescription
-                    }
+                    self.showError(message: error.localizedDescription)
                 } else {
                     print("Call started successfully")
                     guard let call = call else {
@@ -63,6 +68,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
                     DispatchQueue.main.async {
                             //put the reset function here
                         self.isOnCall = true
+                        self.isRunning = false
                     }
                     self.call = call // Store the callId
                     call.delegate = self
@@ -76,6 +82,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     
     func showError(message: String) {
         DispatchQueue.main.async {
+            self.isRunning = false
             self.showAlert = true
             self.codeError = message
         }
@@ -111,13 +118,12 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
             //            }
             //        }
     }
+    
     func isConnected() -> Bool {
         let monitor = NWPathMonitor()
         let queue = DispatchQueue(label: "InternetConnectionMonitor")
         var isConnected = false
-        
         monitor.start(queue: queue)
-        
         monitor.pathUpdateHandler = { path in
             if path.status == .satisfied {
                 isConnected = true
@@ -125,19 +131,19 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
                 isConnected = false
             }
         }
-        
             // Wait for the closure to be called and the isConnected variable to be set
         while !isConnected {
             usleep(10000)
         }
-        
         return isConnected
     }
+    
     func didStartRinging(_ call: SendBirdCalls.DirectCall) {
         let acceptParams = AcceptParams()
         call.accept(with: acceptParams)
         call.delegate = self
     }
+    
     func didEnd(_ call: SendBirdCalls.DirectCall) {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
@@ -159,63 +165,68 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     }
     
     private func stopCallTimer() {
-        callTimer?.invalidate()
-        callTimer = nil
+        timer?.cancel()
+        callDuration = 0.0
+        isRunning = false
     }
     
-        //    func switchCameraPosition() {
-        //        SendBirdCall.switchCameraPosition()
-        //    }
+    func controlTimer() {
+        timer = Timer.publish(every: 0.1, on: .main, in: .common).autoconnect()
+            .sink { _ in
+                self.callDuration += 0.1
+            }
+    }
     
-    
-    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
-        guard let uuid = UUID(uuidString: call.uuid.uuidString) else { return }
+    func switchCameraPosition() {
+    //    SendBirdCall.switchCameraPosition()
+    }
         
-        if call.hasEnded {
-                // The call has ended
-            isOnCall = false
-            stopCallTimer()
-            callDuration = 0
+    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
+            guard let uuid = UUID(uuidString: call.uuid.uuidString) else { return }
             
-        } else if call.isOutgoing {
-                // The call is outgoing
-                // Update UI to show that the user is currently on a call and display the duration of the call
-                // You can use a timer to update the duration of the call
-            if call.hasConnected == false {
-                    // The outgoing call is being dialled
-                DispatchQueue.main.async {
-                    self.isOnCall = true
-                    self.startCallTimer()
-                    SendBirdCall.dial(with: DialParams(calleeId: self.request.codeParam())) { directCall, error in
-                        if let directCall = directCall {
-                            let handle = CXHandle(type: .generic, value: directCall.callId)
-                            let startCallAction = CXStartCallAction(call: uuid, handle: handle)
-                            let transaction = CXTransaction(action: startCallAction)
-                            self.callController.request(transaction) { error in
-                                if let error = error {
-                                        // Handle the error
-                                    self.showError(message: error.localizedDescription)
+            if call.hasEnded {
+                    // The call has ended
+                isOnCall = false
+                stopCallTimer()
+                
+            } else if call.isOutgoing {
+                    // The call is outgoing
+                    // Update UI to show that the user is currently on a call and display the duration of the call
+                    // You can use a timer to update the duration of the call
+                if call.hasConnected == false {
+                        // The outgoing call is being dialled
+                    DispatchQueue.main.async {
+                        self.isOnCall = true
+                        self.startCallTimer()
+                        SendBirdCall.dial(with: DialParams(calleeId: self.request.codeParam())) { directCall, error in
+                            if let directCall = directCall {
+                                let handle = CXHandle(type: .generic, value: directCall.callId)
+                                let startCallAction = CXStartCallAction(call: uuid, handle: handle)
+                                let transaction = CXTransaction(action: startCallAction)
+                                self.callController.request(transaction) { error in
+                                    if let error = error {
+                                            // Handle the error
+                                        self.showError(message: error.localizedDescription)
+                                    }
                                 }
+                                self.controlTimer()
+                                self.call = directCall
+                                self.call?.delegate = self
+                            } else {
+                                    // Handle the error
+                                self.showError(message: error?.localizedDescription ?? "Unknown error")
                             }
-                            self.call = directCall
-                            self.call?.delegate = self
-                        } else {
-                                // Handle the error
-                            self.showError(message: error?.localizedDescription ?? "Unknown error")
                         }
                     }
                 }
+            } else {
+                    // The call state is unknown
             }
-        } else if call.hasConnected {
-                // The call has connected
-        } else {
-                // The call state is unknown
         }
+    
+    struct HangupParams {
+        let call: CXCall
     }
-}
-
-struct HangupParams {
-    let call: CXCall
 }
 
 class MyCallDelegate: DirectCallDelegate {

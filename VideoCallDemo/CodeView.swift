@@ -70,8 +70,12 @@ struct CodeView: View {
                                                 .frame(width: 80, height: 49)
                                                 .background(Color.green)
                                                 // .cornerRadius(10)
-                                            Text("Call")
-                                                .foregroundColor(.white)
+                                            if !callViewModel.isRunning {
+                                                Text("Call")
+                                                    .foregroundColor(.white)
+                                            }else{
+                                                ProgressView()
+                                            }
                                         }
                                     })
                                     .alert(isPresented: $callViewModel.showAlert) {
