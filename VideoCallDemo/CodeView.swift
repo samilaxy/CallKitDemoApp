@@ -16,7 +16,7 @@ struct CodeView: View {
     @State private var error = ""
     
     var body: some View {
-        NavigationStack {
+        NavigationView {
             ZStack {
                 VStack(spacing: 50) {
                     
@@ -37,7 +37,7 @@ struct CodeView: View {
                             HStack(spacing: 0) {
                                 HStack {
                                     TextField("code", text: $userCode)
-                                        .tracking(userCode.isEmpty ? 0 : 3)
+                                       // .tracking(userCode.isEmpty ? 0 : 3)
                                         .padding()
                                         .font(.callout)
                                         .accentColor(Color(UIColor.secondaryLabel))
@@ -49,6 +49,7 @@ struct CodeView: View {
                                         .onChange(of: userCode, perform: { newValue in
                                             if newValue.count >= Constants.OTPCODELENGTH {
                                                     // use to exexcute function after number of digits is reached
+                                                callViewModel.request.userCode = userCode
                                                 callViewModel.userCode = userCode
                                             }
                                             if userCode == newValue {
@@ -59,10 +60,10 @@ struct CodeView: View {
                                     Button(action: {
                                         if !userCode.isEmpty {
                                             callViewModel.showAlert = false
-                                            callViewModel.startCall(withUser: userCode)
+                                            callViewModel.startCall(dialCode: userCode)
                                         }else {
                                             callViewModel.showAlert = true
-                                            callViewModel.codeError = "Code can't be empty"
+                                            callViewModel.codeError = TextsInUse.EmptyField
                                         }
                                     }, label: {
                                         ZStack{
@@ -86,9 +87,9 @@ struct CodeView: View {
                                             secondaryButton: .cancel(Text("Cancel"))
                                         )
                                     }
-                                    .navigationDestination(isPresented: $callViewModel.isOnCall) {
-                                        ContentView()
-                                    }
+//                                    .navigationDestination(isPresented: $callViewModel.isOnCall) {
+//                                        ContentView()
+//                                    }
                                 }
                             }
                             .frame(height: 50)

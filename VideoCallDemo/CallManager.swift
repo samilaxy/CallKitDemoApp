@@ -12,12 +12,16 @@ import SwiftUI
 import UIKit
 import Network
 import Combine
+import AVFoundation
 
-    //import SendBirdUIKit
-
-class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
-    let provider = CXProvider(configuration: CXProviderConfiguration())
-    let callController = CXCallController()
+class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDelegate {
+  
+    
+    
+    static let shared = CallDelegate()
+    
+    let provider: CXProvider
+    let callController: CXCallController
     var call: SendBirdCalls.DirectCall?
     private var callTimer: Timer?
     @Published var isOnCall = false
@@ -29,23 +33,35 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     @Published var userCode = ""
     @Published var isRunning: Bool = false
     @Published var callDuration = 0.0
+    var currentCalls: [CXCall] { self.callController.callObserver.calls }
     private var timer: AnyCancellable?
-        // format timer to show mm:ss:cc.
+        // format timer to show mm:ss
     var formattedTime: String {
         let seconds = Int(callDuration) % 60
         let minutes = Int(callDuration / 60)
         return String(format: "%02d:%02d", minutes, seconds)
     }
+    
     override init() {
         request = CodeRequestDTO()
+        provider = CXProvider.default
+        callController = CXCallController()
         super.init()
+        provider.setDelegate(self, queue: nil)
     }
     
-    func startCall(withUser user: String) {
+    func shouldProcessCall(for callId: UUID) -> Bool {
+        return !self.currentCalls.contains(where: { $0.uuid == callId })
+    }
+    
+    func startCall(dialCode: String) {
+        print("userCode:",dialCode)
+        print("request.codeParam:",request.codeParam())
+        print("request.userCode:",request.userCode)
         isRunning = true
         if isConnected() {
                 // The user is authenticated, you can start a call now
-            let dialParams = DialParams(calleeId: user, isVideoCall: true)
+            let dialParams = DialParams(calleeId: dialCode, isVideoCall: true)
             SendBirdCall.dial(with: dialParams) { call, error in
                 if let error = error {
                     print("Error starting call: \(error.localizedDescription)")
@@ -55,15 +71,15 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
                     guard let call = call else {
                         return
                     }
-                    let update = CXCallUpdate()
-                    update.remoteHandle = CXHandle(type: .generic, value: call.callId)
-                    update.hasVideo = true
-                    
-                    self.provider.reportNewIncomingCall(with: call.callUUID ?? UUID(), update: update) { error in
-                        if let error = error {
-                            print("Failed to report incoming call: \(error.localizedDescription)")
-                        }
-                    }
+//                    let update = CXCallUpdate()
+//                    update.remoteHandle = CXHandle(type: .generic, value: call.callId)
+//                    update.hasVideo = true
+//
+//                    self.provider.reportNewIncomingCall(with: call.callUUID ?? UUID(), update: update) { error in
+//                        if let error = error {
+//                            print("Failed to report incoming call: \(error.localizedDescription)")
+//                        }
+//                    }
                     
                     DispatchQueue.main.async {
                             //put the reset function here
@@ -95,28 +111,59 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
         }
     }
     
-        // MARK: - DirectCallDelegate
+        // Request transaction
+    private func requestTransaction(with action: CXCallAction, completionHandler: ((NSError?) -> Void)?) {
+        let transaction = CXTransaction(action: action)
+        callController.request(transaction) { error in
+            completionHandler?(error as NSError?)
+        }
+    }
+//    func didReceiveIncomingCall(_ call: SendBirdCalls.DirectCall) {
+//        print("Received incoming call")
+//        print("Did ringing for call with call ID: \(call.callId)")
+//        guard let uuid = call.callUUID, let handle = call.caller?.userId, let displayName = call.caller?.nickname else {
+//            return
+//        }
+//
+//            // Report the incoming call to CallKit
+//        reportIncomingCall(uuid: uuid, handle: handle, displayName: displayName) { error in
+//            if let error = error {
+//                    // Handle the error
+//                print("Started ringing for call with error: \(error)")
+//            } else {
+//                    // Present the incoming call UI
+//            }
+//        }
+//    }
     
+    func didEstablish(_ call: DirectCall) {
+        print("Call established")
+    }
+    
+    func didFail(_ call: DirectCall, withError error: Error) {
+        print("Call failed with error: \(error.localizedDescription)")
+    }
+        
+        // MARK: - DirectCallDelegate
     func didConnect(_ call: SendBirdCalls.DirectCall) {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
         update.localizedCallerName = userCode
         _ = UUID(uuidString: call.callId)!
-            //        provider.reportNewIncomingCall(with: callUUID, update: update) { error in
-            //            if let error = error {
-            //                    // Handle the error
-            //                self.showError(message: error.localizedDescription)
-            //            } else {
-            //                    // Call successfully reported
-            //                    // Get the local and remote video views
-            //                DispatchQueue.main.async {
-            //                    self.localVideoView = call.localVideoView
-            //                    self.remoteVideoView = call.remoteVideoView
-            //                    call.delegate = self
-            //                    print("view: ",self.localVideoView)
-            //                }
-            //            }
-            //        }
+        
+        self.call = call // Store the callId
+       print("local", call.localVideoView)
+        print("remote", call.remoteRecordingStatus)
+        call.delegate = self
+        
+    
+                            DispatchQueue.main.async {
+                                self.localVideoView = call.localVideoView
+                                self.remoteVideoView = call.remoteVideoView
+                                call.delegate = self
+                                print("view: ",self.localVideoView)
+                            }
+         
     }
     
     func isConnected() -> Bool {
@@ -128,6 +175,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
             if path.status == .satisfied {
                 isConnected = true
             } else {
+                self.showError(message: TextsInUse.NoInternet)
                 isConnected = false
             }
         }
@@ -139,15 +187,17 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     }
     
     func didStartRinging(_ call: SendBirdCalls.DirectCall) {
+        print("Started ringing for call with call ID: \(call.callId)")
         let acceptParams = AcceptParams()
         call.accept(with: acceptParams)
         call.delegate = self
     }
-    
+
     func didEnd(_ call: SendBirdCalls.DirectCall) {
+        print("Call ended")
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
-        update.localizedCallerName = userCode
+        update.localizedCallerName = request.userCode
         let callUUID = UUID(uuidString: call.callId)!
         provider.reportCall(with: callUUID, endedAt: Date(), reason: .remoteEnded)
     }
@@ -178,68 +228,126 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject {
     }
     
     func switchCameraPosition() {
-    //    SendBirdCall.switchCameraPosition()
-    }
-        
-    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
-            guard let uuid = UUID(uuidString: call.uuid.uuidString) else { return }
-            
-            if call.hasEnded {
-                    // The call has ended
-                isOnCall = false
-                stopCallTimer()
-                
-            } else if call.isOutgoing {
-                    // The call is outgoing
-                    // Update UI to show that the user is currently on a call and display the duration of the call
-                    // You can use a timer to update the duration of the call
-                if call.hasConnected == false {
-                        // The outgoing call is being dialled
-                    DispatchQueue.main.async {
-                        self.isOnCall = true
-                        self.startCallTimer()
-                        SendBirdCall.dial(with: DialParams(calleeId: self.request.codeParam())) { directCall, error in
-                            if let directCall = directCall {
-                                let handle = CXHandle(type: .generic, value: directCall.callId)
-                                let startCallAction = CXStartCallAction(call: uuid, handle: handle)
-                                let transaction = CXTransaction(action: startCallAction)
-                                self.callController.request(transaction) { error in
-                                    if let error = error {
-                                            // Handle the error
-                                        self.showError(message: error.localizedDescription)
-                                    }
-                                }
-                                self.controlTimer()
-                                self.call = directCall
-                                self.call?.delegate = self
-                            } else {
-                                    // Handle the error
-                                self.showError(message: error?.localizedDescription ?? "Unknown error")
-                            }
-                        }
-                    }
-                }
-            } else {
-                    // The call state is unknown
-            }
-        }
-    
-    struct HangupParams {
-        let call: CXCall
+            //    SendBirdCall.switchCameraPosition()
     }
 }
 
-class MyCallDelegate: DirectCallDelegate {
-    func didConnect(_ call: SendBirdCalls.DirectCall) {
+extension CallDelegate: SendBirdCallDelegate, CXCallObserverDelegate {
+    func callObserver(_ callObserver: CXCallObserver, callChanged call: CXCall) {
             //
     }
     
-    func didEnd(_ call: SendBirdCalls.DirectCall) {
-            //
+    func reportIncomingCall(with callID: UUID, update: CXCallUpdate, completionHandler: ((Error?) -> Void)? = nil) {
+        self.provider.reportNewIncomingCall(with: callID, update: update) { (error) in
+            completionHandler?(error)
+        }
     }
     
-    func didStartRinging(_ call: SendBirdCalls.DirectCall) {
-        print("Call started ringing on recipient's device")
-            // You can add code here to update the UI or perform other actions
+    func endCall(for callId: UUID, endedAt: Date, reason: DirectCallEndResult) {
+        guard let endReason = reason.asCXCallEndedReason else { return }
+
+        self.provider.reportCall(with: callId, endedAt: endedAt, reason: endReason)
     }
+    
+    func connectedCall(_ call: DirectCall) {
+        self.provider.reportOutgoingCall(with: call.callUUID!, connectedAt: Date(timeIntervalSince1970: Double(call.startedAt)/1000))
+    }
+    func providerDidReset(_ provider: CXProvider) { }
+    
+    func provider(_ provider: CXProvider, perform action: CXStartCallAction) {
+            // MARK: SendBirdCalls - SendBirdCall.getCall()
+        guard let call = SendBirdCall.getCall(forUUID: action.callUUID) else {
+            action.fail()
+            return
+        }
+        
+        if call.myRole == .caller {
+            provider.reportOutgoingCall(with: call.callUUID!, startedConnectingAt: Date(timeIntervalSince1970: Double(call.startedAt)/1000))
+        }
+        
+        action.fulfill()
+    }
+    
+    func provider(_ provider: CXProvider, perform action: CXAnswerCallAction) {
+        guard let call = SendBirdCall.getCall(forUUID: action.callUUID) else {
+            action.fail()
+            return
+        }
+        
+            //        SendBirdCall.authenticateIfNeed { [weak call] (error) in
+            //            guard let call = call, error == nil else {
+            //                action.fail()
+            //                return
+            //            }
+        
+            // MARK: SendBirdCalls - DirectCall.accept()
+        let callOptions = CallOptions(isAudioEnabled: true, isVideoEnabled: call.isVideoCall, useFrontCamera: true)
+        let acceptParams = AcceptParams(callOptions: callOptions)
+        call.accept(with: acceptParams)
+            // UIApplication.shared.showCallController(with: call)
+        action.fulfill()
+    }
+    
+    func provider(_ provider: CXProvider, perform action: CXEndCallAction) {
+            // Retrieve the SpeakerboxCall instance corresponding to the action's call UUID
+        guard let call = SendBirdCall.getCall(forUUID: action.callUUID) else {
+            action.fail()
+            return
+        }
+        
+        var backgroundTaskID: UIBackgroundTaskIdentifier = .invalid
+        
+            // For decline in background
+        DispatchQueue.global().async {
+            backgroundTaskID = UIApplication.shared.beginBackgroundTask {
+                UIApplication.shared.endBackgroundTask(backgroundTaskID)
+                backgroundTaskID = .invalid
+            }
+            
+            if call.endResult == DirectCallEndResult.none || call.endResult == .unknown {
+                SendBirdCall.authenticateIfNeed { [weak call] (error) in
+                    guard let call = call, error == nil else {
+                        action.fail()
+                        return
+                    }
+                    
+                    call.end {
+                        action.fulfill()
+                        
+                            // End background task
+                        UIApplication.shared.endBackgroundTask(backgroundTaskID)
+                        backgroundTaskID = .invalid
+                    }
+                }
+            } else {
+                action.fulfill()
+            }
+        }
+    }
+    
+    func provider(_ provider: CXProvider, perform action: CXSetMutedCallAction) {
+        guard let call = SendBirdCall.getCall(forUUID: action.callUUID) else {
+            action.fail()
+            return
+        }
+        
+            // MARK: SendBirdCalls - DirectCall.muteMicrophone / .unmuteMicrophone()
+        action.isMuted ? call.muteMicrophone() : call.unmuteMicrophone()
+        
+        action.fulfill()
+    }
+    
+    func provider(_ provider: CXProvider, timedOutPerforming action: CXAction) { }
+    
+        // In order to properly manage the usage of AVAudioSession within CallKit, please implement this function as shown below.
+    func provider(_ provider: CXProvider, didActivate audioSession: AVAudioSession) {
+        SendBirdCall.audioSessionDidActivate(audioSession)
+    }
+    
+        // In order to properly manage the usage of AVAudioSession within CallKit, please implement this function as shown below.
+    func provider(_ provider: CXProvider, didDeactivate audioSession: AVAudioSession) {
+        SendBirdCall.audioSessionDidDeactivate(audioSession)
+    }
+    
 }
+

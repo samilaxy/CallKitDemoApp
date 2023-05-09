@@ -2,17 +2,18 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>UIBackgroundModes</key>
-	<array>
-		<string>audio</string>
-		<string>fetch</string>
-		<string>processing</string>
-		<string>remote-notification</string>
-		<string>voip</string>
-	</array>
 	<key>A_Token</key>
 	<string>$(A_Token)</string>
 	<key>App_ID</key>
 	<string>$(App_ID)</string>
+	<key>NSUserNotificationsUsageDescription</key>
+	<string>This app needs access to your VoIP services to notfy you of incoming calls</string>
+	<key>UIBackgroundModes</key>
+	<array>
+		<string>remote-notification</string>
+		<string>voip</string>
+	</array>
+	<key>User_ID</key>
+	<string>$(User_ID)</string>
 </dict>
 </plist>
