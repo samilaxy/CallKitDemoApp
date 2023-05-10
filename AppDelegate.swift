@@ -212,9 +212,9 @@ extension AppDelegate: PKPushRegistryDelegate {
     }
     
         // MARK: - SendBirdCalls - Receive incoming push event
-//    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
-//        SendBirdCall.pushRegistry(registry, didReceiveIncomingPushWith: payload, for: type, completionHandler: nil)
-//    }
+    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType) {
+        SendBirdCall.pushRegistry(registry, didReceiveIncomingPushWith: payload, for: type, completionHandler: nil)
+    }
     
         // MARK: - SendBirdCalls - Handling incoming call
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
@@ -248,39 +248,5 @@ extension AppDelegate: PKPushRegistryDelegate {
       //  self.currentCall = call
         }
     
-//    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
-//        if let sendBirdData = payload.dictionaryPayload["sendbird"] as? [String: Any],
-//           let callUUIDString = sendBirdData["call_id"] as? String,
-//           let callUUID = UUID(uuidString: callUUIDString) {
-//
-//            if let call = callUUIDMap[callUUID] {
-//                let update = CXCallUpdate()
-//                update.remoteHandle = CXHandle(type: .generic, value: call.caller?.userId ?? "default value")
-//                update.hasVideo = call.isVideoCall
-//
-//                provider?.reportNewIncomingCall(with: callUUID, update: update) { error in
-//                    if error == nil {
-//                            // Successfully reported incoming call to CallKit
-//                        self.callKitCompletionHandler = { accepted in
-//                                // Handle call accepted/rejected by user
-//                            self.callKitCompletionHandler = { accepted in
-//                                if accepted {
-//                                        // User accepted the call
-//                                         print("User accepted the call")
-//                                } else {
-//                                        // User rejected the call
-//                                    print("User rejected the call")
-//                                }
-//                            }
-//
-//                        }
-//
-//                        call.delegate = self
-//                        self.currentCall = call
-//                    }
-//                }
-//            }
-//        }
-//    }
 
 }

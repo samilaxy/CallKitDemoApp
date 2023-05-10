@@ -31,10 +31,11 @@ struct CodeView: View {
                     }
                     VStack {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 0)
-                                .stroke(Color(.clear))
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.secondary.opacity(0.2))
                                 .frame(height: 50)
-                                .background(Color.secondary.opacity(0.2))
+                                .background(Color.secondary.opacity(0.3))
+                                .cornerRadius(10)
                             HStack(spacing: 0) {
                                 HStack {
                                     TextField("code", text: $userCode)
@@ -42,7 +43,7 @@ struct CodeView: View {
                                         .padding()
                                         .font(.callout)
                                         .accentColor(Color(UIColor.secondaryLabel))
-                                        // .cornerRadius(10)
+                                        .cornerRadius(10)
                                         .keyboardType(.asciiCapableNumberPad)
                                         .onTapGesture {
                                                 //  UITextField.appearance().becomeFirstResponder()
@@ -68,10 +69,11 @@ struct CodeView: View {
                                         }
                                     }, label: {
                                         ZStack{
-                                            RoundedRectangle(cornerRadius: 0).stroke()
+                                            RoundedRectangle(cornerRadius: 10)
+                                                .stroke()
                                                 .frame(width: 80, height: 48)
                                                 .background(Color.green)
-                                                // .cornerRadius(10)
+                                                .cornerRadius(10)
                                             if !callViewModel.isRunning {
                                                 Text("Call")
                                                     .foregroundColor(.white)
@@ -123,3 +125,23 @@ struct CodeView: View {
             CodeView()
         }
     }
+
+struct CustomRoundedRectangle: Shape {
+    var topLeftRadius: CGFloat
+    var bottomLeftRadius: CGFloat
+    
+    func path(in rect: CGRect) -> Path {
+        let topLeftCenter = CGPoint(x: rect.minX + topLeftRadius, y: rect.minY + topLeftRadius)
+        let bottomLeftCenter = CGPoint(x: rect.minX + bottomLeftRadius, y: rect.maxY - bottomLeftRadius)
+        
+        var path = Path()
+        path.addArc(center: topLeftCenter, radius: topLeftRadius, startAngle: .degrees(180), endAngle: .degrees(270), clockwise: false)
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.minY))
+        path.addLine(to: CGPoint(x: rect.maxX, y: rect.maxY))
+        path.addLine(to: CGPoint(x: rect.minX, y: rect.maxY))
+        path.addLine(to: bottomLeftCenter)
+        path.addArc(center: bottomLeftCenter, radius: bottomLeftRadius, startAngle: .degrees(90), endAngle: .degrees(0), clockwise: false)
+        
+        return path
+    }
+}
