@@ -1,14 +1,14 @@
 //
-//  AxxendVideoDemoAppTests.swift
-//  AxxendVideoDemoAppTests
+//  VideoCallDemoTests.swift
+//  VideoCallDemoTests
 //
-//  Created by Noye Samuel on 26/04/2023.
+//  Created by Noye Samuel on 28/04/2023.
 //
 
 import XCTest
-@testable import AxxendVideoDemoApp
+@testable import VideoCallDemo
 
-final class AxxendVideoDemoAppTests: XCTestCase {
+final class VideoCallDemoTests: XCTestCase {
 
     override func setUpWithError() throws {
         // Put setup code here. This method is called before the invocation of each test method in the class.
