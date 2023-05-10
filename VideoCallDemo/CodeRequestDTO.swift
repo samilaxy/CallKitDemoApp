@@ -47,7 +47,7 @@ class Validations {
 struct TextsInUse {
     static let Empty = ""
         // textfields
-    static let EmptyField =  "Code can't be empty"
+    static let EmptyField =  "User Invalid"
     static let ValidMatch =  "SELF MATCHES %@"
     static let InvalidPhoneNumber = "*Invalid phone number"
     static let NoInternet = "No Internet access, try again."

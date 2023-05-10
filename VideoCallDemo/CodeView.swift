@@ -31,7 +31,8 @@ struct CodeView: View {
                     }
                     VStack {
                         ZStack {
-                            RoundedRectangle(cornerRadius: 0).stroke()
+                            RoundedRectangle(cornerRadius: 0)
+                                .stroke(Color(.clear))
                                 .frame(height: 50)
                                 .background(Color.secondary.opacity(0.2))
                             HStack(spacing: 0) {
@@ -68,7 +69,7 @@ struct CodeView: View {
                                     }, label: {
                                         ZStack{
                                             RoundedRectangle(cornerRadius: 0).stroke()
-                                                .frame(width: 80, height: 49)
+                                                .frame(width: 80, height: 48)
                                                 .background(Color.green)
                                                 // .cornerRadius(10)
                                             if !callViewModel.isRunning {
@@ -109,8 +110,8 @@ struct CodeView: View {
                     }
                     .navigationBarHidden(true)
                     .padding(.bottom, 100)
-                    .padding(.leading, 16)
-                    .padding(.trailing, 16)
+                    .padding(.leading, 20)
+                    .padding(.trailing, 20)
                 }
             }
         }

@@ -27,6 +27,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
     let userId = TextsInUse.UserID
     var currentCall: DirectCall?
     var callUUIDMap: [UUID: DirectCall] = [:]
+    var callKitCompletionHandler: ((Bool) -> Void)?
     
     func providerDidReset(_ provider: CXProvider) {
             //
@@ -58,6 +59,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
 //            action.fail()
 //            return
 //        }
+        callKitCompletionHandler?(true)
         action.fulfill()
     }
     
@@ -74,6 +76,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
         SendBirdCall.executeOn(queue: self.callbackQueue)
             //
 
+        
+        
         let callObserver = CXCallObserver()
         callObserver.setDelegate(self, queue: nil)
         SendBirdCall.application(application, didReceiveRemoteNotification: [:])
@@ -128,24 +132,50 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
         }
     }
     
-    func didStartRinging(_ call: DirectCall) {
-        let callUUID = UUID()
-        callUUIDMap[callUUID] = call
-        
-        let update = CXCallUpdate()
-        update.remoteHandle = CXHandle(type: .generic, value: call.caller?.userId ?? "Unknown")
-        update.hasVideo = call.isVideoCall
-        update.localizedCallerName = call.caller?.nickname ?? "Unknown"
-        self.provider?.reportNewIncomingCall(with: callUUID, update: update) { error in
-            if let error = error {
-                print("Failed to report incoming call: \(error.localizedDescription)")
-                return
+    func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
+
+            // Get the payload from the notification
+        let payload = response.notification.request.content.userInfo
+
+            // Check if the notification is for a call
+        if let callPayload = payload["sendbird"] as? [String: Any], let isCall = callPayload["call"] as? [String: Any] {
+
+                // Handle incoming call notification
+            if let uuidString = isCall["call_id"] as? String,
+               let uuid = UUID(uuidString: uuidString),
+               let call = SendBirdCall.getCall(forUUID: uuid) {
+                    // Show incoming call screen
+                DispatchQueue.main.async {
+                        // Handle incoming call notification
+                }
+                                call.delegate = self
+                                self.currentCall = call
             }
-            
-            call.delegate = self
-            self.currentCall = call
+
         }
+
+        completionHandler()
     }
+
+    
+//    func didStartRinging(_ call: DirectCall) {
+//        let callUUID = UUID()
+//        callUUIDMap[callUUID] = call
+//
+//        let update = CXCallUpdate()
+//        update.remoteHandle = CXHandle(type: .generic, value: call.caller?.userId ?? "Unknown2")
+//        update.hasVideo = call.isVideoCall
+//        update.localizedCallerName = call.caller?.nickname ?? "Unknown1"
+//        self.provider?.reportNewIncomingCall(with: callUUID, update: update) { error in
+//            if let error = error {
+//                print("Failed to report incoming call: \(error.localizedDescription)")
+//                return
+//            }
+//
+//            call.delegate = self
+//            self.currentCall = call
+//        }
+//    }
 }
 
     // MARK: VoIP Push
@@ -189,20 +219,68 @@ extension AppDelegate: PKPushRegistryDelegate {
         // MARK: - SendBirdCalls - Handling incoming call
     func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
         var caller = ""
+        var callUUID = UUID()
         if let sendBirdData = payload.dictionaryPayload["sendbird"] as? [String: Any],
-           let calleeUserId = sendBirdData["callee_id"] as? String {
+           let calleeUserId = sendBirdData["caller_id"] as? String {
             caller = calleeUserId
+            callUUID = UUID(uuidString: caller) ?? UUID()
         }
 
             let update = CXCallUpdate()
             update.remoteHandle = CXHandle(type: .generic, value: caller)
             update.hasVideo = true
-            provider?.reportNewIncomingCall(with: UUID(), update: update) { error in
-                    // Handle any errors
-               // self.currentCall = call
+        provider?.reportNewIncomingCall(with: callUUID, update: update) { error in
+            if error == nil {
+                    // Successfully reported incoming call to CallKit
+                print("caller:", caller)
+                        // Handle call accepted/rejected by user
+                    self.callKitCompletionHandler = { accepted in
+                        if accepted {
+                                // User accepted the call
+                            print("User accepted the call")
+                        } else {
+                                // User rejected the call
+                            print("User rejected the call")
+                        }
+                    }
+            }
                 }
+      //  self.currentCall = call
         }
     
-
+//    func pushRegistry(_ registry: PKPushRegistry, didReceiveIncomingPushWith payload: PKPushPayload, for type: PKPushType, completion: @escaping () -> Void) {
+//        if let sendBirdData = payload.dictionaryPayload["sendbird"] as? [String: Any],
+//           let callUUIDString = sendBirdData["call_id"] as? String,
+//           let callUUID = UUID(uuidString: callUUIDString) {
+//
+//            if let call = callUUIDMap[callUUID] {
+//                let update = CXCallUpdate()
+//                update.remoteHandle = CXHandle(type: .generic, value: call.caller?.userId ?? "default value")
+//                update.hasVideo = call.isVideoCall
+//
+//                provider?.reportNewIncomingCall(with: callUUID, update: update) { error in
+//                    if error == nil {
+//                            // Successfully reported incoming call to CallKit
+//                        self.callKitCompletionHandler = { accepted in
+//                                // Handle call accepted/rejected by user
+//                            self.callKitCompletionHandler = { accepted in
+//                                if accepted {
+//                                        // User accepted the call
+//                                         print("User accepted the call")
+//                                } else {
+//                                        // User rejected the call
+//                                    print("User rejected the call")
+//                                }
+//                            }
+//
+//                        }
+//
+//                        call.delegate = self
+//                        self.currentCall = call
+//                    }
+//                }
+//            }
+//        }
+//    }
 
 }

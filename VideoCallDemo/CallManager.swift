@@ -118,24 +118,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
             completionHandler?(error as NSError?)
         }
     }
-//    func didReceiveIncomingCall(_ call: SendBirdCalls.DirectCall) {
-//        print("Received incoming call")
-//        print("Did ringing for call with call ID: \(call.callId)")
-//        guard let uuid = call.callUUID, let handle = call.caller?.userId, let displayName = call.caller?.nickname else {
-//            return
-//        }
-//
-//            // Report the incoming call to CallKit
-//        reportIncomingCall(uuid: uuid, handle: handle, displayName: displayName) { error in
-//            if let error = error {
-//                    // Handle the error
-//                print("Started ringing for call with error: \(error)")
-//            } else {
-//                    // Present the incoming call UI
-//            }
-//        }
-//    }
-    
+
     func didEstablish(_ call: DirectCall) {
         print("Call established")
     }
