@@ -15,7 +15,7 @@ import Combine
 import AVFoundation
 
 class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDelegate {
-  
+    
     
     
     static let shared = CallDelegate()
@@ -55,9 +55,6 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
     }
     
     func startCall(dialCode: String) {
-        print("userCode:",dialCode)
-        print("request.codeParam:",request.codeParam())
-        print("request.userCode:",request.userCode)
         isRunning = true
         if isConnected() {
                 // The user is authenticated, you can start a call now
@@ -71,15 +68,15 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
                     guard let call = call else {
                         return
                     }
-//                    let update = CXCallUpdate()
-//                    update.remoteHandle = CXHandle(type: .generic, value: call.callId)
-//                    update.hasVideo = true
-//
-//                    self.provider.reportNewIncomingCall(with: call.callUUID ?? UUID(), update: update) { error in
-//                        if let error = error {
-//                            print("Failed to report incoming call: \(error.localizedDescription)")
-//                        }
-//                    }
+                        //                    let update = CXCallUpdate()
+                        //                    update.remoteHandle = CXHandle(type: .generic, value: call.callId)
+                        //                    update.hasVideo = true
+                        //
+                        //                    self.provider.reportNewIncomingCall(with: call.callUUID ?? UUID(), update: update) { error in
+                        //                        if let error = error {
+                        //                            print("Failed to report incoming call: \(error.localizedDescription)")
+                        //                        }
+                        //                    }
                     
                     DispatchQueue.main.async {
                             //put the reset function here
@@ -118,7 +115,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
             completionHandler?(error as NSError?)
         }
     }
-
+    
     func didEstablish(_ call: DirectCall) {
         print("Call established")
     }
@@ -126,27 +123,27 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
     func didFail(_ call: DirectCall, withError error: Error) {
         print("Call failed with error: \(error.localizedDescription)")
     }
-        
+    
         // MARK: - DirectCallDelegate
     func didConnect(_ call: SendBirdCalls.DirectCall) {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
         update.localizedCallerName = userCode
-        _ = UUID(uuidString: call.callId)!
+        var id = UUID(uuidString: call.callId)!
         
         self.call = call // Store the callId
-       print("local", call.localVideoView)
+        print("local", call.localVideoView)
         print("remote", call.remoteRecordingStatus)
         call.delegate = self
+        self.provider.reportOutgoingCall(with: call.callUUID!, connectedAt: Date(timeIntervalSince1970: Double(call.startedAt)/1000))
+        DispatchQueue.main.async {
+            call.startVideo()
+            self.localVideoView = call.localVideoView
+            self.remoteVideoView = call.remoteVideoView
+            call.delegate = self
+            print("view: ", self.localVideoView)
+        }
         
-    
-                            DispatchQueue.main.async {
-                                self.localVideoView = call.localVideoView
-                                self.remoteVideoView = call.remoteVideoView
-                                call.delegate = self
-                                print("view: ",self.localVideoView)
-                            }
-         
     }
     
     func isConnected() -> Bool {
@@ -175,7 +172,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
         call.accept(with: acceptParams)
         call.delegate = self
     }
-
+    
     func didEnd(_ call: SendBirdCalls.DirectCall) {
         print("Call ended")
         let update = CXCallUpdate()
@@ -190,14 +187,14 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
         self.showError(message: error.localizedDescription)
     }
     
-    private func startCallTimer() {
+    func startCallTimer() {
         callTimer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
             guard let self = self else { return }
             self.callDuration += 1
         }
     }
     
-    private func stopCallTimer() {
+    func stopCallTimer() {
         timer?.cancel()
         callDuration = 0.0
         isRunning = false
@@ -228,7 +225,7 @@ extension CallDelegate: SendBirdCallDelegate, CXCallObserverDelegate {
     
     func endCall(for callId: UUID, endedAt: Date, reason: DirectCallEndResult) {
         guard let endReason = reason.asCXCallEndedReason else { return }
-
+        
         self.provider.reportCall(with: callId, endedAt: endedAt, reason: endReason)
     }
     
