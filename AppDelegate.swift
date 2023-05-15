@@ -69,8 +69,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
     }
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey : Any]? = nil) -> Bool {
-       
-
+  
             // Initialize Sendbird SDK with your application ID
         SendBirdCall.configure(appId: appID)
         SendBirdCall.executeOn(queue: self.callbackQueue)
@@ -115,19 +114,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
         // Handle APNs device token registration
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
             // Register device token with SendbirdCalls
-        let params = AuthenticateParams(userId: userId, accessToken: token)
-        SendBirdCall.authenticate(with: params) { (user, error) in
-            guard error == nil else { return }
-                // Register for push notifications
-        }
         
-        
-        SendBirdCall.registerVoIPPush(token: deviceToken) { error in
-            if let error = error {
-                print("Error registering VoIP push token: \(error.localizedDescription)")
-            } else {
-                UserDefaults.standard.voipPushToken = deviceToken
-                print("VoIP push token registered successfully")
+        if  UserDefaults.standard.voipPushToken == nil {
+            SendBirdCall.registerVoIPPush(token: deviceToken) { error in
+                if let error = error {
+                    print("Error registering VoIP push token: \(error.localizedDescription)")
+                } else {
+                    UserDefaults.standard.voipPushToken = deviceToken
+                    print("VoIP push token registered successfully")
+                }
             }
         }
     }
@@ -147,6 +142,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, CXProviderDelegate, CXCal
                     // Show incoming call screen
                 DispatchQueue.main.async {
                         // Handle incoming call notification
+                    call.startVideo()
+                    CallDelegate.shared.localVideoView = call.localVideoView
+                    CallDelegate.shared.remoteVideoView = call.remoteVideoView
                 }
                                 call.delegate = self
                                 self.currentCall = call

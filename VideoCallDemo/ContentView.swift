@@ -24,61 +24,47 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             ZStack {
-//                VStack {
-//                    if let remoteVideoView = callManager.remoteVideoView {
-//                        RemoteVideoView(remoteVideoView: remoteVideoView)
-//
-//                    } else {
-//                        ProgressView()
-//                        Text("Remote video view loading..")
-//                    }
-//                }   .edgesIgnoringSafeArea(.all)
-//                    .background(Color.clear)
-//                VStack {
-//                    if let localVideoView = callManager.localVideoView {
-//                        LocalVideoView(localVideoView: localVideoView)
-//
-//                    } else {
-//                        ProgressView()
-//                        Text("Local video view is not available")
-//                    }
-//                }.frame(width: 150, height: 150)
-//                    .background(Color.secondary)
-//                    .cornerRadius(75)
-//                    .offset(x: UIScreen.main.bounds.width - 120, y: UIScreen.main.bounds.height - 250)
                 ZStack {
-                    if let localVideoView = callManager.call?.localVideoView {
-                        LocalVideoView(localVideoView: localVideoView)
-                            .onAppear {
-                                isLocalVideoReady = true
-                            }
-                            .opacity(isLocalVideoReady && isRemoteVideoReady ? 1 : 0)
-                    } else {
-                        Image(systemName: "person.crop.circle.fill")
-                            .resizable()
-                            .foregroundColor(.gray)
-                            .frame(width: 80, height: 80)
-                            .opacity(isLocalVideoReady && isRemoteVideoReady ? 0 : 1)
-                    }
-                    
                     if let remoteVideoView = callManager.call?.remoteVideoView {
                         RemoteVideoView(remoteVideoView: remoteVideoView)
                             .onAppear {
                                 isRemoteVideoReady = true
                             }
-                            .opacity(isLocalVideoReady && isRemoteVideoReady ? 1 : 0)
+                            
                     } else {
                         Image(systemName: "person.crop.circle.fill")
                             .resizable()
                             .foregroundColor(.gray)
-                            .frame(width: 200, height: 200)
+                            .frame(width: 150, height: 150)
                             .opacity(isLocalVideoReady && isRemoteVideoReady ? 0 : 1)
                     }
+                    ZStack {
+                        RoundedRectangle(cornerRadius: 10).stroke()
+                            .background(Color.secondary.opacity(0.2))
+                            .cornerRadius(10)
+                        if let localVideoView = callManager.call?.localVideoView {
+                            LocalVideoView(localVideoView: localVideoView)
+                                .onAppear {
+                                    isLocalVideoReady = true
+                                }
+                                .opacity(isLocalVideoReady && isRemoteVideoReady ? 1 : 0)
+                        } else {
+                            Image(systemName: "person.crop.circle.fill")
+                                .resizable()
+                                .foregroundColor(.gray)
+                                .frame(width: 50, height: 50)
+                                .opacity(isLocalVideoReady && isRemoteVideoReady ? 0 : 1)
+                        }
+                    }.frame(width: UIScreen.main.bounds.width * 0.3, height: UIScreen.main.bounds.width * 0.4)
+                        .padding(.leading, UIScreen.main.bounds.width * 0.5)
+                        .padding(.bottom, UIScreen.main.bounds.height * 0.6)
+                    
                     
                     if !isLocalVideoReady || !isRemoteVideoReady {
                         ProgressView()
                     }
                 }
+                .opacity(isLocalVideoReady && isRemoteVideoReady ? 1 : 0)
                 VStack {
                     Spacer()
                     
@@ -87,6 +73,7 @@ struct ContentView: View {
                         
                         Button(action: {
                                 // Handle camera switch action
+                            callManager.startCallTimer()
                         }) {
                             Image(systemName: "camera.rotate")
                                 .foregroundColor(.white)
@@ -99,6 +86,7 @@ struct ContentView: View {
                         
                         Button(action: {
                                 // Handle end call action
+                            callManager.stopCallTimer()
                             callManager.endCall()
                             isCodeView = true
                         }) {
@@ -186,8 +174,10 @@ struct LocalVideoView: UIViewRepresentable {
     }
 }
 
-//    struct ContentView_Previews: PreviewProvider {
-//        static var previews: some View {
-//            ContentView(callManager: <#CallDelegate#>)
-//        }
-//    }
+    struct ContentView_Previews: PreviewProvider {
+        static var previews: some View {
+            ContentView()
+                .previewDevice("iPhone 14 Pro")
+           ContentView().previewDevice("iPhone SE (3rd generation)")
+        }
+    }
