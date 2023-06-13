@@ -25,6 +25,7 @@
 		496F282729FC037B004C7CD6 /* VideoCallDemoUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F282629FC037B004C7CD6 /* VideoCallDemoUITests.swift */; };
 		496F282929FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F282829FC037B004C7CD6 /* VideoCallDemoUITestsLaunchTests.swift */; };
 		496F283A29FC2464004C7CD6 /* CallManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 496F283929FC2464004C7CD6 /* CallManager.swift */; };
+		49EABBC92A12A05000D266CF /* LocalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49EABBC82A12A05000D266CF /* LocalView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +69,7 @@
 		496F283829FC09CF004C7CD6 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		496F283929FC2464004C7CD6 /* CallManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CallManager.swift; sourceTree = "<group>"; };
 		49D349582A0310470060A2D1 /* Config.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Config.xcconfig; sourceTree = "<group>"; };
+		49EABBC82A12A05000D266CF /* LocalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LocalView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -106,6 +108,7 @@
 		496F27FF29FC0378004C7CD6 = {
 			isa = PBXGroup;
 			children = (
+				49EABBC82A12A05000D266CF /* LocalView.swift */,
 				496A16372A0917A200F4AC37 /* AppDelegate.swift */,
 				496A16352A09072100F4AC37 /* PushRegistryDelegate.swift */,
 				496A16332A08F8D500F4AC37 /* CallModel.swift */,
@@ -311,6 +314,7 @@
 			files = (
 				496A16382A0917A200F4AC37 /* AppDelegate.swift in Sources */,
 				4901F86F2A0428680050A440 /* CallViewModel.swift in Sources */,
+				49EABBC92A12A05000D266CF /* LocalView.swift in Sources */,
 				496A16362A09072100F4AC37 /* PushRegistryDelegate.swift in Sources */,
 				496F283A29FC2464004C7CD6 /* CallManager.swift in Sources */,
 				4901F8712A042F870050A440 /* CallView.swift in Sources */,

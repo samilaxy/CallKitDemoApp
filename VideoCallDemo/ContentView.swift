@@ -6,13 +6,14 @@
     ////
 
 import SwiftUI
+import AVFoundation
 import SendBirdCalls
 import Foundation
 
 
 
 struct ContentView: View {
-    
+    let captureSession = AVCaptureSession()
     @ObservedObject var callManager =  CallDelegate()
     @Environment(\.presentationMode) var presentationMode
     var call: DirectCall?
@@ -23,6 +24,7 @@ struct ContentView: View {
     @SwiftUI.State private var isCallView = false
     var body: some View {
         NavigationView{
+            
             ZStack {
                 ZStack {
                     if let remoteVideoView = callManager.call?.remoteVideoView {
@@ -43,7 +45,7 @@ struct ContentView: View {
                             .background(Color.secondary.opacity(0.2))
                             .cornerRadius(10)
                         if let localVideoView = callManager.call?.localVideoView {
-                            LocalVideoView(localVideoView: localVideoView)
+                            LocalVideoView1(localVideoView: localVideoView)
                                 .onAppear {
                                     isLocalVideoReady = true
                                 }
@@ -65,6 +67,13 @@ struct ContentView: View {
                     }
                 }
                 .opacity(isLocalVideoReady && isRemoteVideoReady ? 1 : 0)
+                VStack {
+                    LocalVideoView(session: captureSession)
+                        .aspectRatio(1.77, contentMode: .fit)
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    
+                        // Other UI components
+                }
                 VStack {
                     Spacer()
                     
@@ -161,7 +170,7 @@ struct RemoteVideoView: UIViewRepresentable {
     typealias UIViewType = SendBirdVideoView
 }
 
-struct LocalVideoView: UIViewRepresentable {
+struct LocalVideoView1: UIViewRepresentable {
     
     let localVideoView: SendBirdVideoView
     
@@ -173,6 +182,34 @@ struct LocalVideoView: UIViewRepresentable {
             //
     }
 }
+
+
+struct LocalVideoView: UIViewRepresentable {
+    let session: AVCaptureSession
+    
+    func makeUIView(context: Context) -> UIView {
+        let videoPreviewView = UIView()
+        
+        let videoPreviewLayer = AVCaptureVideoPreviewLayer(session: session)
+        videoPreviewLayer.videoGravity = .resizeAspectFill
+        videoPreviewLayer.frame = videoPreviewView.bounds
+        videoPreviewView.layer.addSublayer(videoPreviewLayer)
+        
+        return videoPreviewView
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
+        guard let videoPreviewLayer = uiView.layer.sublayers?.first as? AVCaptureVideoPreviewLayer else {
+            return
+        }
+        
+        videoPreviewLayer.connection?.videoOrientation = .portrait
+        videoPreviewLayer.frame = uiView.bounds
+    }
+}
+
+
+
 
     struct ContentView_Previews: PreviewProvider {
         static var previews: some View {

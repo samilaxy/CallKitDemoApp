@@ -22,8 +22,9 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
     
     let provider: CXProvider
     let callController: CXCallController
-    var call: SendBirdCalls.DirectCall?
+    var call: DirectCall?
     private var callTimer: Timer?
+
     @Published var isOnCall = false
     @Published var showAlert = false
     @Published var codeError = ""
@@ -33,6 +34,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
     @Published var userCode = ""
     @Published var isRunning: Bool = false
     @Published var callDuration = 0.0
+    
     var currentCalls: [CXCall] { self.callController.callObserver.calls }
     private var timer: AnyCancellable?
         // format timer to show mm:ss
@@ -125,7 +127,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
     }
     
         // MARK: - DirectCallDelegate
-    func didConnect(_ call: SendBirdCalls.DirectCall) {
+    func didConnect(_ call: DirectCall) {
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
         update.localizedCallerName = userCode
@@ -138,12 +140,21 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
         self.provider.reportOutgoingCall(with: call.callUUID!, connectedAt: Date(timeIntervalSince1970: Double(call.startedAt)/1000))
         DispatchQueue.main.async {
             call.startVideo()
+            print("video status",call.isRemoteVideoEnabled)
             self.localVideoView = call.localVideoView
             self.remoteVideoView = call.remoteVideoView
             call.delegate = self
             print("view: ", self.localVideoView)
         }
         
+    }
+    
+    func didRemoteVideoSettingsChange(_ call: DirectCall) {
+        if (call.isRemoteVideoEnabled) {
+                // The peer has been unmuted.
+        } else {
+                // The peer has been muted.
+        }
     }
     
     func isConnected() -> Bool {
@@ -166,14 +177,14 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
         return isConnected
     }
     
-    func didStartRinging(_ call: SendBirdCalls.DirectCall) {
+    func didStartRinging(_ call: DirectCall) {
         print("Started ringing for call with call ID: \(call.callId)")
         let acceptParams = AcceptParams()
         call.accept(with: acceptParams)
         call.delegate = self
     }
     
-    func didEnd(_ call: SendBirdCalls.DirectCall) {
+    func didEnd(_ call: DirectCall) {
         print("Call ended")
         let update = CXCallUpdate()
         update.remoteHandle = CXHandle(type: .generic, value: call.callId)
@@ -182,7 +193,7 @@ class CallDelegate: NSObject, DirectCallDelegate, ObservableObject, CXProviderDe
         provider.reportCall(with: callUUID, endedAt: Date(), reason: .remoteEnded)
     }
     
-    func didFailWithError(_ error: Error, for call: SendBirdCalls.DirectCall) {
+    func didFailWithError(_ error: Error, for call: DirectCall) {
             // Handle the error
         self.showError(message: error.localizedDescription)
     }
